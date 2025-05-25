@@ -8,6 +8,11 @@ from sqlmodel import Session, select
 app = FastAPI()
 
 
+@app.get("/")
+def home():
+    return {"message": "Welcome to todo-fastapi"}
+
+
 @app.post("/todo", response_model=ToDo)
 def create_todo(todo: ToDo, session: Session = Depends(get_session)) -> dict[str, str]:
     session.add(todo)
@@ -53,4 +58,5 @@ def delete_todo(id: int, session: Session = Depends(get_session)):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("main:app", reload=True)
+    # Set host to 0.0.0.0 to allow connections from render
+    uvicorn.run("main:app", host="0.0.0.0")
